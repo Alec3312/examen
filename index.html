@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculo de Áreas</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    <h1>Calculadora de Áreas Geométricas</h1>
+
+    <select id="figureSelector">
+        <option value="">Selecciona una figura</option>
+        <option value="square">Cuadrado</option>
+        <option value="triangle">Triángulo</option>
+        <option value="circle">Círculo</option>
+    </select>
+
+    <img id="figureImage" class="figure-image" src="" alt="Figura seleccionada" style="display:none;">
+
+    <div id="inputContainer"></div>
+
+    <button id="calculateButton" style="display:none;">Calcular</button>
+
+    <p id="result"></p>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const figureSelector = document.getElementById('figureSelector');
+            const figureImage = document.getElementById('figureImage');
+            const inputContainer = document.getElementById('inputContainer');
+            const calculateButton = document.getElementById('calculateButton');
+            const resultParagraph = document.getElementById('result');
+
+            figureSelector.addEventListener('change', () => {
+                const selectedFigure = figureSelector.value;
+                inputContainer.innerHTML = ''; // Limpiar inputs anteriores
+                resultParagraph.textContent = ''; // Limpiar resultado anterior
+
+                if (selectedFigure) {
+                    figureImage.style.display = 'block';
+                    calculateButton.style.display = 'block';
+
+                    switch (selectedFigure) {
+                        case 'square':
+                            figureImage.src = 'figuras/cuadrado.png';
+                            inputContainer.innerHTML = `
+                                <input type="number" id="side" placeholder="Lado">
+                            `;
+                            break;
+                        case 'triangle':
+                            figureImage.src = 'figuras/triangulo.jpg';
+                            inputContainer.innerHTML = `
+                                <input type="number" id="base" placeholder="Base">
+                                <input type="number" id="height" placeholder="Altura">
+                            `;
+                            break;
+                        case 'circle':
+                            figureImage.src = 'figuras/circulo.jpg';
+                            inputContainer.innerHTML = `
+                                <input type="number" id="radius" placeholder="Radio">
+                            `;
+                            break;
+                        default:
+                            figureImage.style.display = 'none';
+                            calculateButton.style.display = 'none';
+                    }
+                } else {
+                    figureImage.style.display = 'none';
+                    calculateButton.style.display = 'none';
+                }
+            });
+
+            calculateButton.addEventListener('click', () => {
+                const selectedFigure = figureSelector.value;
+                let area = 0;
+
+                if (selectedFigure === 'square') {
+                    const side = parseFloat(document.getElementById('side').value);
+                    if (side > 0) area = side * side;
+
+                } else if (selectedFigure === 'triangle') {
+                    const base = parseFloat(document.getElementById('base').value);
+                    const height = parseFloat(document.getElementById('height').value);
+                    if (base > 0 && height > 0) area = (base * height) / 2;
+
+                } else if (selectedFigure === 'circle') {
+                    const radius = parseFloat(document.getElementById('radius').value);
+                    if (radius > 0) area = Math.PI * Math.pow(radius, 2);
+                }
+
+                resultParagraph.textContent = area > 0 ? `El área es: ${area.toFixed(2)}` : 'Por favor, ingresa valores válidos.';
+            });
+        });
+    </script>
+</body>
+</html>
